@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pemilihan Ketua RT</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: auto; padding: 20px; }
+    input, select, button { width: 100%; padding: 10px; margin: 10px 0; }
+    .success { color: green; font-weight: bold; }
+    .error { color: red; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>Pemilihan Calon Ketua RT</h2>
+  <form id="voteForm">
+    <label>Nama Lengkap:</label>
+    <input type="text" id="name" required />
+
+    <label>Alamat / RT:</label>
+    <input type="text" id="address" required />
+
+    <label>Pilihan 1:</label>
+    <select id="choice1" required></select>
+
+    <label>Pilihan 2:</label>
+    <select id="choice2" required></select>
+
+    <label>Pilihan 3:</label>
+    <select id="choice3" required></select>
+
+    <button type="submit">Kirim</button>
+    <p id="status"></p>
+  </form>
+
+  <script>
+    const candidates = ["Andi", "Budi", "Cici", "Dodi", "Euis"];
+    const choice1 = document.getElementById("choice1");
+    const choice2 = document.getElementById("choice2");
+    const choice3 = document.getElementById("choice3");
+    const form = document.getElementById("voteForm");
+    const status = document.getElementById("status");
+
+    function createOptions(options, selected = "") {
+      const base = [`<option value="">Pilih calon</option>`];
+      return base.concat(options.map(name => 
+        `<option value="${name}" ${selected === name ? "selected" : ""}>${name}</option>`)).join('');
+    }
+
+    function updateAllOptions() {
+      const val1 = choice1.value;
+      const val2 = choice2.value;
+
+      const available2 = candidates.filter(c => c !== val1);
+      choice2.innerHTML = createOptions(available2, val2 && available2.includes(val2) ? val2 : "");
+
+      const val2New = choice2.value;
+      const available3 = candidates.filter(c => c !== val1 && c !== val2New);
+      choice3.innerHTML = createOptions(available3);
+    }
+
+    function init() {
+      choice1.innerHTML = createOptions(candidates);
+      choice2.innerHTML = createOptions(candidates);
+      choice3.innerHTML = createOptions(candidates);
+    }
+
+    choice1.addEventListener("change", () => {
+      updateAllOptions();
+    });
+
+    choice2.addEventListener("change", () => {
+      updateAllOptions();
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("name").value.trim();
+      const address = document.getElementById("address").value.trim();
+      const selected1 = choice1.value;
+      const selected2 = choice2.value;
+      const selected3 = choice3.value;
+
+      if (!selected1 || !selected2 || !selected3) {
+        status.textContent = "Mohon pilih ketiga calon.";
+        status.className = "error";
+        return;
+      }
+
+      if (new Set([selected1, selected2, selected3]).size !== 3) {
+        status.textContent = "Setiap pilihan harus berbeda!";
+        status.className = "error";
+        return;
+      }
+
+      try {
+        const res = await fetch("https://script.google.com/macros/s/AKfycbwDlX7QUh6P7KQpYWfW2msZIHbkyqyAz27AYQG7Nm3FWugdJbBIpRQF091fojKcJMbj/exec", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, address, selected1, selected2, selected3 })
+        });
+
+        const result = await res.json();
+        if (result.status === "success") {
+          status.textContent = "Terima kasih, pilihan Anda telah disimpan!";
+          status.className = "success";
+          form.reset();
+          init();
+        } else {
+          status.textContent = "Gagal menyimpan data.";
+          status.className = "error";
+        }
+      } catch (err) {
+        status.textContent = "Terjadi kesalahan jaringan.";
+        status.className = "error";
+        console.error(err);
+      }
+    });
+
+    init();
+  </script>
+</body>
+</html>
