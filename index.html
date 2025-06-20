@@ -93,13 +93,13 @@
         return;
       }
 
-      const gasUrl = "https://script.google.com/macros/s/AKfycbwr9OHDdkYR0EtnwGFBAaI9JkWOGK2y0xlkS9nqz3_IsheLrZZzeVmV4MvuumVxrAYb/exec";
+      const gasUrl = "https://script.google.com/macros/s/AKfycbxk_r8Q2kQBDjqaNS56STNsr-3ft0_qBExMo0fx9laCTiNr-5MqdLHzG0-LEAQ01CjE/exec";
       try {
-        const res = await fetch("https://corsproxy.io/?" + encodeURIComponent(gasUrl), {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, address, selected1, selected2, selected3 })
-        });
+        const res = await fetch(gasUrl, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ name, address, selected1, selected2, selected3 })
+			});
 
         const result = await res.json();
         if (result.status === "success") {
