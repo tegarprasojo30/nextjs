@@ -44,7 +44,7 @@
     function createOptions(options, selected = "") {
       const base = [`<option value="">Pilih calon</option>`];
       return base.concat(options.map(name => 
-        `<option value="\${name}" \${selected === name ? "selected" : ""}>\${name}</option>`)).join('');
+        `<option value="${name}" ${selected === name ? "selected" : ""}>${name}</option>`)).join('');
     }
 
     function updateAllOptions() {
@@ -93,7 +93,7 @@
         return;
       }
 
-      const gasUrl = "https://script.google.com/macros/s/AKfycbwDlX7QUh6P7KQpYWfW2msZIHbkgyqAz27AYQG7Nm3FWugdJbBIpRQF091fojKcJMbj/exec";
+      const gasUrl = "https://script.google.com/macros/s/AKfycby4VdpYilGJeaqZVw0iLF1q0oQq17TwH8EcTUgjCwdNED5zFHuHqb69dsCaCfXyktfk/exec";
       try {
         const res = await fetch("https://corsproxy.io/?" + encodeURIComponent(gasUrl), {
           method: "POST",
