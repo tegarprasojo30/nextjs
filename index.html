@@ -43,7 +43,7 @@
 
     function createOptions(options, selected = "") {
       const base = [`<option value="">Pilih calon</option>`];
-      return base.concat(options.map(name => 
+      return base.concat(options.map(name =>
         `<option value="${name}" ${selected === name ? "selected" : ""}>${name}</option>`)).join('');
     }
 
@@ -65,13 +65,8 @@
       choice3.innerHTML = createOptions(candidates);
     }
 
-    choice1.addEventListener("change", () => {
-      updateAllOptions();
-    });
-
-    choice2.addEventListener("change", () => {
-      updateAllOptions();
-    });
+    choice1.addEventListener("change", () => updateAllOptions());
+    choice2.addEventListener("change", () => updateAllOptions());
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -93,13 +88,13 @@
         return;
       }
 
-      const gasUrl = "https://script.google.com/macros/s/AKfycbxk_r8Q2kQBDjqaNS56STNsr-3ft0_qBExMo0fx9laCTiNr-5MqdLHzG0-LEAQ01CjE/exec";
+      const gasUrl = "https://script.google.com/macros/s/AKfycbylVWGnZQ2jj8PsY84zpFUTUB-PmY9q_CG3hrYQb3CAVx_9QM6uG-DHMzoDAqtydA3C/exec"; // ← Ganti bagian ini
       try {
         const res = await fetch(gasUrl, {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ name, address, selected1, selected2, selected3 })
-			});
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, address, selected1, selected2, selected3 })
+        });
 
         const result = await res.json();
         if (result.status === "success") {
