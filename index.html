@@ -44,7 +44,7 @@
     function createOptions(options, selected = "") {
       const base = [`<option value="">Pilih calon</option>`];
       return base.concat(options.map(name =>
-        `<option value="${name}" ${selected === name ? "selected" : ""}>${name}</option>`)).join('');
+        `<option value="\${name}" \${selected === name ? "selected" : ""}>\${name}</option>`)).join('');
     }
 
     function updateAllOptions() {
@@ -88,7 +88,8 @@
         return;
       }
 
-      const gasUrl = "https://script.google.com/macros/s/AKfycbylVWGnZQ2jj8PsY84zpFUTUB-PmY9q_CG3hrYQb3CAVx_9QM6uG-DHMzoDAqtydA3C/exec"; // ← Ganti bagian ini
+      const gasUrl = "https://script.google.com/macros/s/AKfycbx4TwB6DTsT4In9wt7dLJxHKfVov847KZm52L62_ATFPiEgBgzmxhOjrfStp1GKpPb5/exec"; // Ganti dengan URL Web App Anda
+
       try {
         const res = await fetch(gasUrl, {
           method: "POST",
